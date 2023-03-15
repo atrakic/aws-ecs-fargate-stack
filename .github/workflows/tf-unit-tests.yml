@@ -17,11 +17,6 @@ jobs:
       # required for all workflows
       security-events: write
 
-    #defaults:
-    #  run:
-    #    shell: bash
-    #    working-directory: ./terraform
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,7 +24,7 @@ jobs:
       - name: Set common environment variables
         run: grep -v "^#" .github/.env >> $GITHUB_ENV
 
-      - name: Setup and run tests
+      - name: Setup directory
         working-directory: ./terraform
         run: pwd
 

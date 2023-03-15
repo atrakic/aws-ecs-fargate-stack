@@ -17,10 +17,10 @@ jobs:
       # required for all workflows
       security-events: write
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./terraform
+    #defaults:
+    #  run:
+    #    shell: bash
+    #    working-directory: ./terraform
 
     steps:
       - name: Checkout

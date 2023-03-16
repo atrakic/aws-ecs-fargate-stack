@@ -6,7 +6,7 @@ on:
       confirmRun:
         description: 'Confirm if you want to delete stack'
         required: true
-        default: false
+        #default: false
         type: boolean
       environment:
         description: 'What stack to delete'
@@ -30,22 +30,13 @@ jobs:
       TFSTATE_BUCKET: ${{ secrets.TFSTATE_BUCKET }}
       TFSTATE_REGION: ${{ env.AWS_DEFAULT_REGION }}
       TFSTATE_KEY: 'stacks/${{ env.GITHUB_REPOSITORY }}-${{ inputs.environment }}'
-    defaults:
-      run:
-        shell: bash
-        # We keep Terraform files in the terraform directory.
-        working-directory: ./terraform
 
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
 
       - name: Set common environment variables
-        run: grep -v "^#" ./.github/.env >> $GITHUB_ENV
-
-      - name: Setup directory
-        working-directory: ./terraform
-        run: pwd
+        run: grep -v "^#" .github/.env >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -54,19 +45,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-      - name: Test configuration of AWS CLI
-        run: |
-          aws --version
-          aws configure list | grep region | awk '{print $2}'
-
       - name: Setup Terraform with specified version on the runner
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
+      - name: Setup directory
+        working-directory: ./terraform
+        run: pwd
+
       - name: Terraform init
         id: init
-        run: .github/scripts/terraform-with-backend.sh
+        run: ../.github/scripts/terraform-with-backend.sh
         env:
           TFSTATE_BUCKET: ${{ env.TFSTATE_BUCKET }}
           TFSTATE_REGION: ${{ env.AWS_DEFAULT_REGION }}

@@ -7,27 +7,30 @@ resource "aws_security_group" "lb" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description = "Ingress ${var.app_port} access for ALB"
-    protocol    = "tcp"
-    from_port   = var.app_port
-    to_port     = var.app_port
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Ingress ${var.app_port} access for ALB"
+    protocol         = "tcp"
+    from_port        = var.app_port
+    to_port          = var.app_port
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   ingress {
-    description = "Ingress HTTPS access for ALB"
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Ingress HTTPS access for ALB"
+    protocol         = "tcp"
+    from_port        = 443
+    to_port          = 443
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
-    description = "Egress access for ALB"
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Egress access for ALB"
+    protocol         = "-1"
+    from_port        = 0
+    to_port          = 0
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
   tags = local.tags
 }
@@ -47,10 +50,12 @@ resource "aws_security_group" "ecs_tasks" {
   }
 
   egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol         = "-1"
+    from_port        = 0
+    to_port          = 0
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
+
   tags = local.tags
 }

@@ -2,8 +2,8 @@
 
 #tfsec:ignore:aws-elb-alb-not-public
 resource "aws_alb" "main" {
-  name                       = "${var.prefix}-load-balancer"
-  subnets                    = aws_subnet.public.*.id
+  name                       = "${local.prefix}-load-balancer"
+  subnets                    = module.vpc.public_subnets
   security_groups            = [aws_security_group.lb.id]
   drop_invalid_header_fields = true
   preserve_host_header       = false
@@ -12,10 +12,10 @@ resource "aws_alb" "main" {
 }
 
 resource "aws_alb_target_group" "app" {
-  name        = "${var.prefix}-target-group"
+  name        = "${local.prefix}-target-group"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = module.vpc.vpc_id
   target_type = "ip"
 
   health_check {

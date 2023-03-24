@@ -51,3 +51,9 @@ resource "aws_ecs_service" "app" {
 
   depends_on = [aws_alb_listener.app, aws_iam_role_policy_attachment.ecs_task_execution_role]
 }
+
+resource "aws_service_discovery_private_dns_namespace" "app" {
+  name        = "${local.app_name}.${terraform.workspace}.local"
+  description = "${local.app_name} private dns namespace"
+  vpc         = module.vpc.vpc_id
+}

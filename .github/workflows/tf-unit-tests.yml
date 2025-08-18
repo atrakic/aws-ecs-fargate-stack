@@ -23,7 +23,7 @@ jobs:
     container: hashicorp/terraform:light
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Terraform Format Check
         run: terraform fmt -check -recursive -diff
         working-directory: ./terraform
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set common environment variables
         run: cat ../.github/.env >> $GITHUB_ENV
